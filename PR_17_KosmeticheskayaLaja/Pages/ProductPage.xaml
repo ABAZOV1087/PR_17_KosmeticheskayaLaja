@@ -1,0 +1,70 @@
+﻿<Page x:Class="PR_17_KosmeticheskayaLaja.Pages.ProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Магазин косметики">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBox Name="TBoxSearch" Width="150" Margin="5" TextChanged="TBoxSearch_TextChanged" Tag="Поиск по названию..."/>
+
+            <ComboBox Name="ComboType" Width="120" Margin="5" DisplayMemberPath="TypeName" SelectionChanged="ComboType_SelectionChanged"/>
+
+            <ComboBox Name="ComboManufacturer" Width="120" Margin="5" DisplayMemberPath="Name" SelectionChanged="ComboManufacturer_SelectionChanged"/>
+
+            <ComboBox Name="ComboSort" Width="120" Margin="5" SelectionChanged="ComboSort_SelectionChanged">
+                <ComboBoxItem Content="Без сортировки"/>
+                <ComboBoxItem Content="Рейтинг (возр.)"/>
+                <ComboBoxItem Content="Рейтинг (убыв.)"/>
+            </ComboBox>
+
+            <Button Name="BtnCart" Content="В корзину" Margin="10,0,0,0" Click="BtnCart_Click"/>
+            <Button Name="BtnBack" Content="Назад" Margin="5,0,0,0" Click="BtnBack_Click"/>
+        </StackPanel>
+
+        <ListBox Name="LBoxProducts" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="10" Width="200" Height="250">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="White"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHighDiscount}" Value="True">
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+
+                        <StackPanel Padding="10">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" Height="40"/>
+                            <TextBlock Text="{Binding ProductTypes.TypeName}" FontStyle="Italic"/>
+                            <TextBlock Text="{Binding Manufacturers.Name}"/>
+                            <Separator Margin="5"/>
+                            <TextBlock Text="{Binding Price, StringFormat={}{0} руб.}" FontSize="16"/>
+                            <TextBlock Text="{Binding Discount, StringFormat=Скидка: {0}%}" Foreground="Red"/>
+                            <TextBlock Text="{Binding Rating, StringFormat=⭐ {0}}"/>
+
+                            <Button Content="В корзину" Margin="0,10,0,0" Click="BtnAddToCart_Click" Tag="{Binding ID_Product}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Page>

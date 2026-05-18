@@ -13,15 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PR_17_KosmeticheskayaLaja
-
+namespace PR_17_KosmeticheskayaLaja.Pages
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Логика взаимодействия для ProductPage.xaml
+    /// </summary>
+    public partial class ProductPage : Page
     {
-        public MainWindow()
+        public ProductPage()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Pages.StartPage());
         }
     }
 }
