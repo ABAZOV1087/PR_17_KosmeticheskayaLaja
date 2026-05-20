@@ -1,58 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PR_17_KosmeticheskayaLaja.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для LoginPage.xaml
-    /// </summary>
     public partial class LoginPage : Page
     {
         public LoginPage()
         {
             InitializeComponent();
-
         }
-    private void BtnLogin_Click(object sender, RoutedEventArgs e)
+
+        private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var user = Core.Context.Users.FirstOrDefault(u => u.Login == TBoxLogin.Text && u.Password == PBoxPassword.Password);
+            string login = TBoxLogin.Text.Trim();
+            string password = PBoxPassword.Password.Trim();
 
-            if (user != null)
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
             {
-                if (user.IsFrozen)
-                {
-                    MessageBox.Show("Ваш аккаунт заморожен!");
-                    return;
-                }
-
-                // Сохраняем пользователя в Core для доступа с других страниц
-                // (Добавь public static Users CurrentUser в класс Core)
-                // Core.CurrentUser = user; 
-
-                switch (user.FID_Role)
-                {
-                    case 1: NavigationService.Navigate(new ClientPage()); break;
-                    case 2: NavigationService.Navigate(new MasterPage()); break;
-                    case 3: NavigationService.Navigate(new ManagerPage()); break;
-                    case 4: NavigationService.Navigate(new AdminPage()); break;
-                }
+                MessageBox.Show("Введите логин и пароль!");
+                return;
             }
-            else
+
+            // Ищем пользователя в базе данных
+            var user = Core.Context.Users.FirstOrDefault(u => u.Login == login && u.Password == password);
+
+            if (user == null)
             {
-                MessageBox.Show("Неверный логин или пароль");
+                MessageBox.Show("Неверный логин или пароль!");
+                return;
             }
+
+            // Проверяем, не заморожен ли аккаунт (ТЗ Администратора)
+            if (user.IsFrozen)
+            {
+                MessageBox.Show("Ваш аккаунт временно заблокирован администратором!", "Блокировка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Сохраняем залогиненного пользователя в глобальный контекст
+            Core.CurrentUser = user;
+
+            // Перенаправление на страницы в зависимости от роли (ID_Role)
+            switch (user.FID_Role)
+            {
+                case 1: // Клиент
+                    MessageBox.Show($"Добро пожаловать, {user.FullName}! Переходим на главную.");
+                    NavigationService.Navigate(new StartPage());
+                    break;
+
+                case 2: // Мастер
+                    MessageBox.Show($"Успешный вход! Рабочее место мастера: {user.FullName}");
+                    NavigationService.Navigate(new MasterPage());
+                    break;
+
+                case 3: // Менеджер
+                    MessageBox.Show("Вход выполнен! Открывается панель Менеджера.");
+                    NavigationService.Navigate(new ManagerPage());
+                    break;
+
+                case 4: // Администратор
+                    MessageBox.Show("Уровень доступа: Администратор. Загрузка панели управления.");
+                    NavigationService.Navigate(new AdminPage());
+                    break;
+
+                default:
+                    MessageBox.Show("Ошибка определения прав доступа. Обратитесь к администратору.");
+                    break;
+            }
+        }
+
+        private void BtnRegisterRedirect_Click(object sender, RoutedEventArgs e)
+        {
+            // Если есть страница регистрации — переходим, если нет — можно закомментировать
+            // NavigationService.Navigate(new RegisterPage());
         }
     }
 }

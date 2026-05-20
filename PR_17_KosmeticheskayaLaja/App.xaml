@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:BooleanToStatusConverter x:Key="BooleanToStatusConverter"/>
+        <local:BooleanToFreezeConverter x:Key="BooleanToFreezeConverter"/>
+        <local:BooleanToCancelConverter x:Key="BooleanToCancelConverter"/>
     </Application.Resources>
 </Application>

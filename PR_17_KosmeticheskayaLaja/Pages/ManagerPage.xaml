@@ -1,0 +1,91 @@
+﻿<Page x:Class="PR_17_KosmeticheskayaLaja.Pages.ManagerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+     Title="Панель Менеджера" Background="White">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Рабочее место менеджера «Косметическая лажа»" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button Content="Выйти" Width="80" Height="25" HorizontalAlignment="Right" Click="BtnLogout_Click"/>
+        </Grid>
+
+        <TabControl Grid.Row="1" x:Name="ManagerTabs" SelectionChanged="ManagerTabs_SelectionChanged">
+
+            <TabItem Header="Заказы товаров">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="DGridOrders" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№ Заказа" Binding="{Binding ID_Order}" Width="70"/>
+                            <DataGridTextColumn Header="Клиент" Binding="{Binding Users.FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Дата заказа" Binding="{Binding OrderDate, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
+                            <DataGridTextColumn Header="Дата доставки" Binding="{Binding DeliveryDate, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
+                            <DataGridTextColumn Header="Оплата" Binding="{Binding PaymentMethod}" Width="100"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding IsClosed, Converter={StaticResource BooleanToStatusConverter}}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Grid.Row="1" Content="Выдать (Закрыть) заказ" Width="180" Height="30" HorizontalAlignment="Right" Margin="0,10,0,0" Click="BtnCloseOrder_Click"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Товары (Склад)">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="DGridProducts" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
+                            <DataGridTextColumn Header="Тип" Binding="{Binding ProductTypes.TypeName}" Width="120"/>
+                            <DataGridTextColumn Header="Производитель" Binding="{Binding Manufacturers.Name}" Width="120"/>
+                            <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
+                            <DataGridTextColumn Header="Скидка (%)" Binding="{Binding Discount}" Width="80"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding IsFrozen, Converter={StaticResource BooleanToFreezeConverter}}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <Button Content="Добавить товар" Width="120" Height="30" Margin="0,0,10,0" Click="BtnAddProduct_Click"/>
+                        <Button Content="Изменить / Скидка" Width="140" Height="30" Margin="0,0,10,0" Click="BtnEditProduct_Click"/>
+                        <Button Content="Заморозить / Разморозить" Width="170" Height="30" Click="BtnFreezeProduct_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Записи на сеансы">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="DGridAppointments" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding AppointmentDate, StringFormat=\{0:dd.MM.yyyy\}}" Width="90"/>
+                            <DataGridTextColumn Header="Время" Binding="{Binding AppointmentTime}" Width="70"/>
+                            <DataGridTextColumn Header="Мастер" Binding="{Binding Users.FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Услуга" Binding="{Binding ServiceTypes.Title}" Width="130"/>
+                            <DataGridTextColumn Header="Клиент" Binding="{Binding Users1.FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Статус отмены" Binding="{Binding IsCanceled, Converter={StaticResource BooleanToCancelConverter}}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <Button Content="Перенести запись" Width="130" Height="30" Margin="0,0,10,0" Click="BtnReschedule_Click"/>
+                        <Button Content="Отменить запись" Width="130" Height="30" Background="LightCoral" Click="BtnCancelAppointment_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>

@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Магазин косметики">
+Title="Магазин косметики">
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -51,7 +51,7 @@
                             </Style>
                         </Border.Style>
 
-                        <StackPanel Padding="10">
+                        <StackPanel Margin="10">
                             <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" Height="40"/>
                             <TextBlock Text="{Binding ProductTypes.TypeName}" FontStyle="Italic"/>
                             <TextBlock Text="{Binding Manufacturers.Name}"/>

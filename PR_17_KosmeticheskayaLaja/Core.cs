@@ -11,5 +11,6 @@ namespace PR_17_KosmeticheskayaLaja
     {
         public static KosmeticheskayaLajaEntities Context = new KosmeticheskayaLajaEntities();
         public static Users CurrentUser { get; set; }
+        public static List<Products> Cart { get; set; } = new List<Products>();
     }
 }

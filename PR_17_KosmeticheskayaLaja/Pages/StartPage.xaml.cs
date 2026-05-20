@@ -13,8 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PR_17_KosmeticheskayaLaja
-
+namespace PR_17_KosmeticheskayaLaja.Pages
 {
     public partial class StartPage : Page
     {
@@ -56,17 +55,16 @@ namespace PR_17_KosmeticheskayaLaja
 
         private void BtnProducts_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ProductsPage());
+            NavigationService.Navigate(new ProductPage());
         }
 
         private void ListServices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListServices.SelectedItem is ServiceTypes selectedService)
             {
-                var masters = Core.Context.MasterServices
-                    .Where(ms => ms.FID_ServiceType == selectedService.ID_ServiceType)
-                    .Select(ms => ms.Users)
-                    .ToList();
+                // Находим мастеров, у которых есть эта услуга, через навигационное свойство Users
+                // (EF автоматически связывает их, если таблица MasterServices была промежуточной)
+                var masters = selectedService.Users.Where(u => u.FID_Role == 2).ToList();
                 ListMasters.ItemsSource = masters;
             }
         }
@@ -89,5 +87,25 @@ namespace PR_17_KosmeticheskayaLaja
                 NavigationService.GoBack();
             }
         }
+        private void ListAvailableTimes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListAvailableTimes.SelectedItem is Appointments selectedAppointment)
+            {
+                if (Core.CurrentUser == null)
+                {
+                    MessageBox.Show("Для записи необходимо войти в систему!");
+                    return;
+                }
+
+                var service = ListServices.SelectedItem as ServiceTypes;
+                var master = ListMasters.SelectedItem as Users;
+
+                if (service != null && master != null)
+                {
+                    NavigationService.Navigate(new AppointmentConfirmPage(service, master, selectedAppointment));
+                }
+            }
+        }
+
     }
 }
