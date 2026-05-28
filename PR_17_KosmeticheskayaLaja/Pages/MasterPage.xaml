@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Панель Мастера" Background="White">
+Title="Панель Мастера" Background="White">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,27 +14,23 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-            <TextBlock Text="Расписание на дату:" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0"/>
-            <DatePicker x:Name="DPickerSchedule" Width="150" SelectedDateChanged="DPickerSchedule_SelectedDateChanged"/>
-            <Button Content="Сегодня" Width="80" Margin="10,0,0,0" Click="BtnToday_Click"/>
-            <TextBlock x:Name="TxtMasterInfo" Text="Мастер: " FontSize="14" FontWeight="Bold" Margin="30,0,0,0" VerticalAlignment="Center" Foreground="DarkSlateGray"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock x:Name="TBlockWelcome" Text="Расписание мастера" FontSize="20" FontWeight="Bold"/>
+            <Button Content="Выйти" Width="80" Height="25" HorizontalAlignment="Right" Click="BtnLogout_Click"/>
+        </Grid>
 
-        <DataGrid x:Name="DGridAppointments" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+        <DataGrid x:Name="DGridAppointments" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal" Background="Transparent">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Binding="{Binding AppointmentDate, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
                 <DataGridTextColumn Header="Время" Binding="{Binding AppointmentTime}" Width="80"/>
-                <DataGridTextColumn Header="Клиент" Binding="{Binding Users1.FullName}" Width="*"/>
-                <DataGridTextColumn Header="Телефон" Binding="{Binding Users1.Phone}" Width="120"/>
-                <DataGridTextColumn Header="Услуга" Binding="{Binding MasterServices.ServiceTypes.Title}" Width="150"/>
-                <DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="180"/>
-                <DataGridTextColumn Header="Оплата" Binding="{Binding PaymentMethod}" Width="100"/>
+                <DataGridTextColumn Header="Услуга" Binding="{Binding ServiceTypes.Title}" Width="200"/>
+                <DataGridTextColumn Header="Клиент" Binding="{Binding Users1.FullName}" Width="200"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Comment}" Width="120"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button Content="Удалить запись" Width="120" Height="35" Background="LightCoral" Margin="0,0,10,0" Click="BtnDeleteAppointment_Click"/>
-            <Button Content="Выйти из аккаунта" Width="150" Height="35" Click="BtnLogout_Click"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Отменить выбранный сеанс" Width="200" Height="35" Background="#E74C3C" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Click="BtnCancelAppointment_Click"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -20,75 +20,58 @@ namespace PR_17_KosmeticheskayaLaja.Pages
         public MasterPage()
         {
             InitializeComponent();
-            DPickerSchedule.SelectedDate = DateTime.Now.Date;
 
             if (Core.CurrentUser != null)
             {
-                TxtMasterInfo.Text = $"Мастер: {Core.CurrentUser.FullName}";
+                TBlockWelcome.Text = $"Расписание мастера: {Core.CurrentUser.FullName}";
             }
 
-            UpdateSchedule();
+            UpdateGrid();
         }
 
-        private void UpdateSchedule()
+        private void UpdateGrid()
         {
-            if (Core.CurrentUser == null || DPickerSchedule.SelectedDate == null) return;
+            if (Core.CurrentUser == null) return;
 
-            DateTime selectedDate = DPickerSchedule.SelectedDate.Value.Date;
-
-            // Выбираем только те записи, которые НЕ отменены (IsCanceled == false)
-            // И которые принадлежат текущему авторизованному мастеру
-            var schedule = Core.Context.Appointments
-                .Where(a => a.FID_Master == Core.CurrentUser.ID_User
-                         && a.AppointmentDate == selectedDate
-                         && a.IsCanceled == false)
-                .OrderBy(a => a.AppointmentTime)
+            var appointments = Core.Context.Appointments
+                .Where(a => a.FID_Master == Core.CurrentUser.ID_User)
                 .ToList();
 
-            DGridAppointments.ItemsSource = null;
-            DGridAppointments.ItemsSource = schedule;
-        }
-
-        private void DPickerSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateSchedule();
-        }
-
-        private void BtnToday_Click(object sender, RoutedEventArgs e)
-        {
-            DPickerSchedule.SelectedDate = DateTime.Now.Date;
-        }
-
-        private void BtnDeleteAppointment_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = DGridAppointments.SelectedItem as Appointments;
-            if (selected == null)
+            foreach (var app in appointments)
             {
-                MessageBox.Show("Выберите запись для удаления из списка!");
+                app.Comment = app.IsCanceled ? "❌ Отменён" : "✅ Активен";
+            }
+
+            DGridAppointments.ItemsSource = appointments;
+        }
+
+        private void BtnCancelAppointment_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedAppointment = DGridAppointments.SelectedItem as Appointments;
+
+            if (selectedAppointment == null)
+            {
+                MessageBox.Show("Выберите сеанс из таблицы для отмены!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите отменить эту запись клиента?", "Отмена записи", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (selectedAppointment.IsCanceled)
+            {
+                MessageBox.Show("Этот сеанс уже был отменен ранее.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var result = MessageBox.Show("Вы уверены, что хотите отменить этот сеанс?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                try
+                var appInDb = Core.Context.Appointments.FirstOrDefault(a => a.ID_Appointment == selectedAppointment.ID_Appointment);
+                if (appInDb != null)
                 {
-                    var appointmentInDb = Core.Context.Appointments.FirstOrDefault(a => a.ID_Appointment == selected.ID_Appointment);
-                    if (appointmentInDb != null)
-                    {
-                        // Вместо присвоения null (которое вызывало ошибку компиляции), 
-                        // выставляем встроенный в БД флаг отмены в значение true
-                        appointmentInDb.IsCanceled = true;
-
-                        Core.Context.SaveChanges();
-                        MessageBox.Show("Запись успешно отменена!");
-                        UpdateSchedule();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при отмене записи: " + ex.Message);
+                    appInDb.IsCanceled = true;
+                    Core.Context.SaveChanges();
+                    MessageBox.Show("Сеанс успешно отменен.");
+                    UpdateGrid();
                 }
             }
         }

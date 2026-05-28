@@ -6,17 +6,24 @@
       xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="LoginPage">
-
+      Title="Авторизация" Background="#F4F4F4">
     <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="200">
-            <TextBlock Text="Логин"/>
-            <TextBox Name="TBoxLogin" Margin="0,0,0,10"/>
+        <Border Background="White" Width="350" Height="300" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="Gray" BlurRadius="15" Direction="270" ShadowDepth="3" Opacity="0.2"/>
+            </Border.Effect>
 
-            <TextBlock Text="Пароль"/>
-            <PasswordBox Name="PBoxPassword" Margin="0,0,0,20"/>
+            <StackPanel Margin="30,20,30,20">
+                <TextBlock Text="Авторизация" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20" Foreground="#333333"/>
 
-            <Button Content="Войти" Click="BtnLogin_Click" Height="30"/>
-        </StackPanel>
+                <TextBlock Text="Логин:" Margin="0,0,0,5" Foreground="Gray"/>
+                <TextBox x:Name="TBoxLogin" Height="30" VerticalContentAlignment="Center" Margin="0,0,0,15" Padding="5,0,0,0"/>
+
+                <TextBlock Text="Пароль:" Margin="0,0,0,5" Foreground="Gray"/>
+                <PasswordBox x:Name="PBoxPassword" Height="30" VerticalContentAlignment="Center" Margin="0,0,0,20" Padding="5,0,0,0"/>
+
+                <Button Content="Войти" Height="35" Background="#4A90E2" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Click="BtnLogin_Click"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>

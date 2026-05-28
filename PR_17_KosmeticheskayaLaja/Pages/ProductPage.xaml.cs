@@ -21,80 +21,60 @@ namespace PR_17_KosmeticheskayaLaja.Pages
         {
             InitializeComponent();
 
-            // Заполняем фильтры
-            var types = Core.Context.ProductTypes.ToList();
-            types.Insert(0, new ProductTypes { TypeName = "Все типы" });
-            ComboType.ItemsSource = types;
-            ComboType.SelectedIndex = 0;
+            var manufacturers = Core.Context.Manufacturers.ToList();
+            manufacturers.Insert(0, new Manufacturers { Name = "Все производители" });
+            ComboFilter.ItemsSource = manufacturers;
+            ComboFilter.SelectedIndex = 0;
+            ComboSort.SelectedIndex = 0;
 
-            var manufs = Core.Context.Manufacturers.ToList();
-            manufs.Insert(0, new Manufacturers { Name = "Все производители" });
-            ComboManufacturer.ItemsSource = manufs;
-            ComboManufacturer.SelectedIndex = 0;
-
-            UpdateData();
+            UpdateProducts();
         }
 
-        private void UpdateData()
+        private void UpdateProducts()
         {
-            var list = Core.Context.Products.ToList();
+            var currentProducts = Core.Context.Products.ToList();
 
-            // Поиск
-            if (!string.IsNullOrWhiteSpace(TBoxSearch.Text))
-                list = list.Where(p => p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+            if (ComboFilter.SelectedIndex > 0)
+            {
+                var selectedManufacturer = ComboFilter.SelectedItem as Manufacturers;
+                currentProducts = currentProducts.Where(p => p.FID_Manufacturer == selectedManufacturer.ID_Manufacturer).ToList();
+            }
 
-            // Фильтр по типу
-            if (ComboType.SelectedIndex > 0)
-                list = list.Where(p => p.FID_ProductType == (ComboType.SelectedItem as ProductTypes).ID_ProductType).ToList();
+            string searchText = TBoxSearch.Text.Trim().ToLower();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                currentProducts = currentProducts.Where(p => p.Title.ToLower().Contains(searchText)).ToList();
+            }
 
-            // Фильтр по производителю
-            if (ComboManufacturer.SelectedIndex > 0)
-                list = list.Where(p => p.FID_Manufacturer == (ComboManufacturer.SelectedItem as Manufacturers).ID_Manufacturer).ToList();
+            if (ComboSort.SelectedIndex == 1)
+            {
+                currentProducts = currentProducts.OrderBy(p => p.Price).ToList();
+            }
+            else if (ComboSort.SelectedIndex == 2)
+            {
+                currentProducts = currentProducts.OrderByDescending(p => p.Price).ToList();
+            }
 
-            // Сортировка по рейтингу
-            if (ComboSort.SelectedIndex == 1) list = list.OrderBy(p => p.Rating).ToList();
-            else if (ComboSort.SelectedIndex == 2) list = list.OrderByDescending(p => p.Rating).ToList();
-
-            LBoxProducts.ItemsSource = list;
+            LBoxProducts.ItemsSource = currentProducts;
         }
 
-        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e) => UpdateData();
-        private void ComboType_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateData();
-        private void ComboManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateData();
-        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateData();
-
-        private void BtnBack_Click(object sender, RoutedEventArgs e) => NavigationService.GoBack();
+        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e) => UpdateProducts();
+        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateProducts();
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateProducts();
 
         private void BtnAddToCart_Click(object sender, RoutedEventArgs e)
         {
-            if (Core.CurrentUser == null)
-            {
-                MessageBox.Show("Добавление доступно только после авторизации!");
-                return;
-            }
-
             var button = sender as Button;
-            if (button != null)
+            var product = button?.DataContext as Products;
+            if (product != null)
             {
-                int productId = Convert.ToInt32(button.Tag);
-                var product = Core.Context.Products.FirstOrDefault(p => p.ID_Product == productId);
-
-                if (product != null)
-                {
-                    Core.Cart.Add(product);
-                    MessageBox.Show($"{product.Title} добавлен в корзину!");
-                }
+                MessageBox.Show($"Товар \"{product.Title}\" успешно добавлен в корзину!");
             }
         }
 
-        private void BtnCart_Click(object sender, RoutedEventArgs e)
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
-            if (Core.CurrentUser == null)
-            {
-                MessageBox.Show("Корзина доступна только после авторизации!");
-                return;
-            }
-            NavigationService.Navigate(new CartPage());
+            NavigationService.GoBack();
         }
     }
 }

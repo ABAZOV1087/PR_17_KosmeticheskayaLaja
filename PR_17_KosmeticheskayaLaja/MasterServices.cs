@@ -12,14 +12,13 @@ namespace PR_17_KosmeticheskayaLaja
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderDetails
+    public partial class MasterServices
     {
-        public int ID_OrderDetail { get; set; }
-        public int FID_Order { get; set; }
-        public int FID_Product { get; set; }
-        public int Quantity { get; set; }
+        public int ID_MasterService { get; set; }
+        public int FID_Master { get; set; }
+        public int FID_Service { get; set; }
     
-        public virtual Orders Orders { get; set; }
-        public virtual Products Products { get; set; }
+        public virtual Users Users { get; set; }
+        public virtual ServiceTypes ServiceTypes { get; set; }
     }
 }

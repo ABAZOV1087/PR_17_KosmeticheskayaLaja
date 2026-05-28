@@ -6,65 +6,76 @@
       xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-Title="Магазин косметики">
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+Title="Каталог косметики" Background="#F9F9F9">
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <TextBox Name="TBoxSearch" Width="150" Margin="5" TextChanged="TBoxSearch_TextChanged" Tag="Поиск по названию..."/>
+    <Border Padding="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <ComboBox Name="ComboType" Width="120" Margin="5" DisplayMemberPath="TypeName" SelectionChanged="ComboType_SelectionChanged"/>
+            <Grid Grid.Row="0" Margin="0,0,0,10">
+                <Button Content="← Назад к записи" Width="120" Height="25" HorizontalAlignment="Left" Click="BtnBack_Click"/>
+                <TextBlock Text="Каталог продукции" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
+            </Grid>
 
-            <ComboBox Name="ComboManufacturer" Width="120" Margin="5" DisplayMemberPath="Name" SelectionChanged="ComboManufacturer_SelectionChanged"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+                <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <TextBox x:Name="TBoxSearch" Width="180" Height="25" VerticalContentAlignment="Center" TextChanged="TBoxSearch_TextChanged"/>
 
-            <ComboBox Name="ComboSort" Width="120" Margin="5" SelectionChanged="ComboSort_SelectionChanged">
-                <ComboBoxItem Content="Без сортировки"/>
-                <ComboBoxItem Content="Рейтинг (возр.)"/>
-                <ComboBoxItem Content="Рейтинг (убыв.)"/>
-            </ComboBox>
+                <TextBlock Text="Производитель:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                <ComboBox x:Name="ComboFilter" Width="150" Height="25" DisplayMemberPath="Name" SelectionChanged="ComboFilter_SelectionChanged"/>
 
-            <Button Name="BtnCart" Content="В корзину" Margin="10,0,0,0" Click="BtnCart_Click"/>
-            <Button Name="BtnBack" Content="Назад" Margin="5,0,0,0" Click="BtnBack_Click"/>
-        </StackPanel>
+                <TextBlock Text="Цена:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                <ComboBox x:Name="ComboSort" Width="130" Height="25" SelectionChanged="ComboSort_SelectionChanged">
+                    <ComboBoxItem Content="Без сортировки"/>
+                    <ComboBoxItem Content="По возрастанию"/>
+                    <ComboBoxItem Content="По убыванию"/>
+                </ComboBox>
+            </StackPanel>
 
-        <ListBox Name="LBoxProducts" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ListBox x:Name="LBoxProducts" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="10" Width="200" Height="250">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Background" Value="White"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHighDiscount}" Value="True">
-                                        <Setter Property="Background" Value="LightGreen"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White" Width="220" Height="260" Margin="10" CornerRadius="6" BorderBrush="#E0E0E0" BorderThickness="1" Padding="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                        <StackPanel Margin="10">
-                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" Height="40"/>
-                            <TextBlock Text="{Binding ProductTypes.TypeName}" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding Manufacturers.Name}"/>
-                            <Separator Margin="5"/>
-                            <TextBlock Text="{Binding Price, StringFormat={}{0} руб.}" FontSize="16"/>
-                            <TextBlock Text="{Binding Discount, StringFormat=Скидка: {0}%}" Foreground="Red"/>
-                            <TextBlock Text="{Binding Rating, StringFormat=⭐ {0}}"/>
+                                    <Border Grid.Row="0" Background="#F2F2F2" CornerRadius="4" Margin="0,0,0,10">
+                                        <TextBlock Text="🛍️" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
 
-                            <Button Content="В корзину" Margin="0,10,0,0" Click="BtnAddToCart_Click" Tag="{Binding ID_Product}"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </Grid>
+                                    <TextBlock Grid.Row="1" Text="{Binding Title}" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Height="40"/>
+
+                                    <TextBlock Grid.Row="2" Text="{Binding Manufacturers.Name}" Foreground="Gray" FontSize="12" Margin="0,2,0,8"/>
+
+                                    <DockPanel Grid.Row="3">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Price, StringFormat={}{0} ₽}" FontSize="14" FontWeight="Black" Foreground="#4A90E2"/>
+                                            <TextBlock Text="{Binding Discount, StringFormat={}Скидка: {0}%}" FontSize="11" Foreground="Green"/>
+                                        </StackPanel>
+                                        <Button Content="В корзину" Width="80" Height="28" HorizontalAlignment="Right" Background="#4A90E2" Foreground="White" BorderBrush="{x:Null}" Click="BtnAddToCart_Click"/>
+                                    </DockPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Grid>
+    </Border>
 </Page>

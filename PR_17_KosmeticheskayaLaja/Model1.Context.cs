@@ -13,10 +13,10 @@ namespace PR_17_KosmeticheskayaLaja
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class KosmeticheskayaLajaEntities : DbContext
+    public partial class KosmeticheskayaLajaEntities1 : DbContext
     {
-        public KosmeticheskayaLajaEntities()
-            : base("name=KosmeticheskayaLajaEntities")
+        public KosmeticheskayaLajaEntities1()
+            : base("name=KosmeticheskayaLajaEntities1")
         {
         }
     
@@ -27,6 +27,7 @@ namespace PR_17_KosmeticheskayaLaja
     
         public virtual DbSet<Appointments> Appointments { get; set; }
         public virtual DbSet<Manufacturers> Manufacturers { get; set; }
+        public virtual DbSet<MasterServices> MasterServices { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Products> Products { get; set; }

@@ -20,92 +20,60 @@ namespace PR_17_KosmeticheskayaLaja.Pages
         public StartPage()
         {
             InitializeComponent();
-            LoadData();
-            ConfigureAccess();
+
+            ComboServices.ItemsSource = Core.Context.ServiceTypes.ToList();
+            ComboMasters.ItemsSource = Core.Context.Users.Where(u => u.FID_Role == 2).ToList();
+            PickerDate.SelectedDate = DateTime.Now;
         }
 
-        private void LoadData()
+        private void BtnBook_Click(object sender, RoutedEventArgs e)
         {
-            ComboMaster.ItemsSource = Core.Context.Users.Where(u => u.FID_Role == 2).ToList();
-            ComboServiceType.ItemsSource = Core.Context.ServiceTypes.ToList();
-            ListServices.ItemsSource = Core.Context.ServiceTypes.ToList();
-        }
+            var selectedService = ComboServices.SelectedItem as ServiceTypes;
+            var selectedMaster = ComboMasters.SelectedItem as Users;
+            DateTime? selectedDate = PickerDate.SelectedDate;
+            string timeStr = TBoxTime.Text.Trim();
 
-        private void ConfigureAccess()
-        {
-            if (Core.CurrentUser == null)
+            if (selectedService == null || selectedMaster == null || !selectedDate.HasValue || string.IsNullOrEmpty(timeStr))
             {
-                BtnAccount.Visibility = Visibility.Collapsed;
-                BtnLogin.Visibility = Visibility.Visible;
+                MessageBox.Show("Пожалуйста, заполните все поля для записи!");
+                return;
             }
-            else
+
+            try
             {
-                BtnLogin.Visibility = Visibility.Collapsed;
-                if (Core.CurrentUser.FID_Role == 1)
+                TimeSpan time = TimeSpan.Parse(timeStr);
+
+                Appointments newAppointment = new Appointments
                 {
-                    BtnAccount.Visibility = Visibility.Visible;
-                }
+                    AppointmentDate = selectedDate.Value,
+                    AppointmentTime = time,
+                    FID_Master = selectedMaster.ID_User,
+                    FID_Service = selectedService.ID_ServiceType,
+                    FID_Client = Core.CurrentUser != null ? Core.CurrentUser.ID_User : 1, // Если зашел гость/клиент
+                    IsCanceled = false
+                };
+
+                Core.Context.Appointments.Add(newAppointment);
+                Core.Context.SaveChanges();
+
+                MessageBox.Show("Вы успешно записаны на сеанс!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                TBoxTime.Clear();
+            }
+            catch
+            {
+                MessageBox.Show("Некорректный формат времени! Используйте чч:мм (например, 14:30).");
             }
         }
 
-        private void BtnLogin_Click(object sender, RoutedEventArgs e)
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
+            Core.CurrentUser = null;
             NavigationService.Navigate(new LoginPage());
         }
-
-        private void BtnProducts_Click(object sender, RoutedEventArgs e)
+        private void BtnGoToCatalog_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new ProductPage());
         }
-
-        private void ListServices_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ListServices.SelectedItem is ServiceTypes selectedService)
-            {
-                // Находим мастеров, у которых есть эта услуга, через навигационное свойство Users
-                // (EF автоматически связывает их, если таблица MasterServices была промежуточной)
-                var masters = selectedService.Users.Where(u => u.FID_Role == 2).ToList();
-                ListMasters.ItemsSource = masters;
-            }
-        }
-
-        private void ListMasters_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ListMasters.SelectedItem is Users selectedMaster && ListServices.SelectedItem is ServiceTypes selectedService)
-            {
-                var appointments = Core.Context.Appointments
-                    .Where(a => a.FID_Master == selectedMaster.ID_User && a.FID_ServiceType == selectedService.ID_ServiceType && !a.IsCompleted && !a.IsCanceled)
-                    .ToList();
-                ListAvailableTimes.ItemsSource = appointments;
-            }
-        }
-
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
-        {
-            if (NavigationService.CanGoBack)
-            {
-                NavigationService.GoBack();
-            }
-        }
-        private void ListAvailableTimes_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ListAvailableTimes.SelectedItem is Appointments selectedAppointment)
-            {
-                if (Core.CurrentUser == null)
-                {
-                    MessageBox.Show("Для записи необходимо войти в систему!");
-                    return;
-                }
-
-                var service = ListServices.SelectedItem as ServiceTypes;
-                var master = ListMasters.SelectedItem as Users;
-
-                if (service != null && master != null)
-                {
-                    NavigationService.Navigate(new AppointmentConfirmPage(service, master, selectedAppointment));
-                }
-            }
-        }
-
     }
 }

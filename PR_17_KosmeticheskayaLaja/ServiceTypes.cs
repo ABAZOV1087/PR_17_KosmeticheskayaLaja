@@ -18,15 +18,16 @@ namespace PR_17_KosmeticheskayaLaja
         public ServiceTypes()
         {
             this.Appointments = new HashSet<Appointments>();
-            this.Users = new HashSet<Users>();
+            this.MasterServices = new HashSet<MasterServices>();
         }
     
         public int ID_ServiceType { get; set; }
         public string Title { get; set; }
+        public decimal Price { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Appointments> Appointments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Users> Users { get; set; }
+        public virtual ICollection<MasterServices> MasterServices { get; set; }
     }
 }

@@ -20,67 +20,52 @@ namespace PR_17_KosmeticheskayaLaja.Pages
         public AdminPage()
         {
             InitializeComponent();
-            RefreshData();
-
-            // Загружаем доступные роли в выпадающий список для смены прав
-            ComboRoles.ItemsSource = Core.Context.Roles.ToList();
+            UpdateGrid();
         }
 
-        private void RefreshData()
+        private void UpdateGrid()
         {
-            // Обновляем таблицу пользователей, исключая самого себя, чтобы случайно не заблокироваться
-            if (Core.CurrentUser != null)
+            var users = Core.Context.Users.ToList();
+            DGridUsers.ItemsSource = users;
+
+            DGridUsers.LoadingRow += (s, e) =>
             {
-                DGridUsers.ItemsSource = Core.Context.Users
-                    .Where(u => u.ID_User != Core.CurrentUser.ID_User)
-                    .ToList();
-            }
-            else
-            {
-                DGridUsers.ItemsSource = Core.Context.Users.ToList();
-            }
+                if (e.Row.Item is Users user)
+                {
+                    var cell = DGridUsers.Columns[4].GetCellContent(e.Row) as TextBlock;
+                    if (cell != null)
+                    {
+                        cell.Text = user.IsFrozen ? "❄️ Заморожен" : "🔥 Активен";
+                    }
+                }
+            };
         }
 
         private void BtnToggleFreeze_Click(object sender, RoutedEventArgs e)
         {
             var selectedUser = DGridUsers.SelectedItem as Users;
-            if (selectedUser == null)
-            {
-                MessageBox.Show("Выберите учетную запись пользователя из таблицы!");
-                return;
-            }
-
-            // Инвертируем флаг заморозки аккаунта
-            selectedUser.IsFrozen = !selectedUser.IsFrozen;
-            Core.Context.SaveChanges();
-
-            MessageBox.Show($"Статус аккаунта для {selectedUser.FullName} изменен на: {(selectedUser.IsFrozen ? "ЗАБЛОКИРОВАН" : "АКТИВЕН (РАЗМОРОЖЕН)")}");
-            RefreshData();
-        }
-
-        private void BtnChangeRole_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedUser = DGridUsers.SelectedItem as Users;
-            var selectedRole = ComboRoles.SelectedItem as Roles;
 
             if (selectedUser == null)
             {
-                MessageBox.Show("Выберите пользователя для изменения роли!");
+                MessageBox.Show("Выберите пользователя из таблицы!");
                 return;
             }
 
-            if (selectedRole == null)
+            if (selectedUser.ID_User == Core.CurrentUser.ID_User)
             {
-                MessageBox.Show("Выберите новую роль из выпадающего списка!");
+                MessageBox.Show("Вы не можете заморозить самого себя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Меняем внешний ключ роли на ID выбранной роли
-            selectedUser.FID_Role = selectedRole.ID_Role;
-            Core.Context.SaveChanges();
+            var userInDb = Core.Context.Users.FirstOrDefault(u => u.ID_User == selectedUser.ID_User);
+            if (userInDb != null)
+            {
+                userInDb.IsFrozen = !userInDb.IsFrozen;
+                Core.Context.SaveChanges();
 
-            MessageBox.Show($"Пользователю {selectedUser.FullName} успешно присвоена роль: {selectedRole.RoleName}");
-            RefreshData();
+                MessageBox.Show($"Статус пользователя {userInDb.FullName} успешно изменен!");
+                UpdateGrid();
+            }
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)

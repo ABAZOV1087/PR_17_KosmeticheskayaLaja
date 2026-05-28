@@ -6,31 +6,36 @@
       xmlns:local="clr-namespace:PR_17_KosmeticheskayaLaja.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Косметическая лажа - Главная">
-    <Grid Background="White">
+      Title="Запись на сеанс" Background="White">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <ComboBox x:Name="ComboMaster" Width="150" Margin="5" DisplayMemberPath="FullName"/>
-            <ComboBox x:Name="ComboServiceType" Width="150" Margin="5" DisplayMemberPath="Title"/>
-            <Button x:Name="BtnLogin" Content="Войти" Margin="5" Click="BtnLogin_Click"/>
-            <Button x:Name="BtnAccount" Content="Аккаунт" Margin="5" Visibility="Collapsed"/>
-            <Button Content="Товары" Margin="5" Click="BtnProducts_Click"/>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Онлайн-запись на услуги" FontSize="20" FontWeight="Bold"/>
+        </Grid>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="🛍️ Каталог товаров" Width="130" Height="25" Margin="0,0,10,0" Background="#4A90E2" Foreground="White" BorderBrush="{x:Null}" Click="BtnGoToCatalog_Click"/>
+            <Button Content="Выйти" Width="80" Height="25" Click="BtnLogout_Click"/>
         </StackPanel>
 
-        <Grid Grid.Row="1" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <TextBlock Text="Выберите услугу:" Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <ComboBox x:Name="ComboServices" DisplayMemberPath="Title" Height="30" Margin="0,0,0,15"/>
 
-            <ListBox x:Name="ListServices" DisplayMemberPath="Title" SelectionChanged="ListServices_SelectionChanged" Margin="5"/>
-            <ListBox x:Name="ListMasters" Grid.Column="1" DisplayMemberPath="FullName" SelectionChanged="ListMasters_SelectionChanged" Margin="5"/>
-            <ListBox x:Name="ListAvailableTimes" Grid.Column="2" DisplayMemberPath="AppointmentTime" Margin="5"/>
-        </Grid>
+            <TextBlock Text="Выберите мастера:" Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <ComboBox x:Name="ComboMasters" DisplayMemberPath="FullName" Height="30" Margin="0,0,0,15"/>
+
+            <TextBlock Text="Выберите дату:" Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <DatePicker x:Name="PickerDate" Height="30" Margin="0,0,0,15"/>
+
+            <TextBlock Text="Укажите время (например, 14:00):" Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <TextBox x:Name="TBoxTime" Height="30" VerticalContentAlignment="Center" Margin="0,0,0,25"/>
+
+            <Button Content="Подтвердить запись" Height="35" Background="#2ECC71" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Click="BtnBook_Click"/>
+        </StackPanel>
     </Grid>
 </Page>

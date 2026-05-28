@@ -1,4 +1,4 @@
-﻿// Создание кода T4 для модели "C:\Users\235002\source\repos\PR_17_KosmeticheskayaLaja\PR_17_KosmeticheskayaLaja\KosmeticheskayaLaja.edmx" включено. 
+﻿// Создание кода T4 для модели "C:\Users\235002\source\repos\ABAZOV1087\PR_17_KosmeticheskayaLaja\PR_17_KosmeticheskayaLaja\Model1.edmx" включено. 
 // Чтобы включить формирование кода прежних версий, измените значение свойства "Стратегия создания кода" конструктора
 // на "Legacy ObjectContext". Это свойство доступно в окне "Свойства", если модель
 // открыта в конструкторе.

@@ -7,38 +7,30 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Панель Администратора" Background="White">
-    <Grid Margin="15">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="0,0,0,15">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Администрирование пользователей" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                <TextBlock Text=" | Режим: Полный доступ" Foreground="Gray" FontSize="14" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            </StackPanel>
-            <Button Content="Выйти из системы" Width="130" Height="25" HorizontalAlignment="Right" Click="BtnLogout_Click"/>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Управление пользователями системы" FontSize="20" FontWeight="Bold"/>
+            <Button Content="Выйти" Width="80" Height="25" HorizontalAlignment="Right" Click="BtnLogout_Click"/>
         </Grid>
 
-        <DataGrid x:Name="DGridUsers" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+        <DataGrid x:Name="DGridUsers" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal" Background="Transparent">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding ID_User}" Width="50"/>
-                <DataGridTextColumn Header="ФИО Пользователя" Binding="{Binding FullName}" Width="*"/>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="200"/>
                 <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="120"/>
-                <DataGridTextColumn Header="Логин" Binding="{Binding Login}" Width="100"/>
-                <DataGridTextColumn Header="Роль в системе" Binding="{Binding Roles.RoleName}" Width="120"/>
-                <DataGridTextColumn Header="Статус аккаунта" Binding="{Binding IsFrozen, Converter={StaticResource BooleanToFreezeConverter}}" Width="120"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Login}" Width="120"/>
+                <DataGridTextColumn Header="Роль" Binding="{Binding Roles.RoleName}" Width="120"/>
+                <DataGridTextColumn Header="Состояние аккаунта" x:Name="ColFreeze" Width="150"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <TextBlock Text="Изменить роль выбранного:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="13"/>
-            <ComboBox x:Name="ComboRoles" Width="130" Height="30" DisplayMemberPath="RoleName" Margin="0,0,15,0"/>
-            <Button Content="Применить роль" Width="120" Height="30" Margin="0,0,20,0" Click="BtnChangeRole_Click"/>
-
-            <Button Content="Заблокировать / Разморозить" Width="190" Height="30" Background="LightSkyBlue" FontWeight="Bold" Click="BtnToggleFreeze_Click"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Заморозить / Разморозить" Width="200" Height="35" Background="#E67E22" Foreground="White" FontWeight="Bold" Margin="0,0,0,0" BorderBrush="{x:Null}" Click="BtnToggleFreeze_Click"/>
         </StackPanel>
     </Grid>
 </Page>

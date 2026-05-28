@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PR_17_KosmeticheskayaLaja.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,15 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PR_17_KosmeticheskayaLaja
-
 {
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
+
+        public partial class MainWindow : Window
         {
-            InitializeComponent();
-            MainFrame.Navigate(new Pages.StartPage());
+            public MainWindow()
+            {
+                InitializeComponent();
+                MainFrame.Navigate(new LoginPage());
+            }
         }
-    }
 }
+

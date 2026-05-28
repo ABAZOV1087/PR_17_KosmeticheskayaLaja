@@ -22,13 +22,12 @@ namespace PR_17_KosmeticheskayaLaja
     
         public int ID_Product { get; set; }
         public string Title { get; set; }
+        public decimal Price { get; set; }
+        public int Discount { get; set; }
+        public decimal Rating { get; set; }
+        public bool IsFrozen { get; set; }
         public int FID_ProductType { get; set; }
         public int FID_Manufacturer { get; set; }
-        public decimal Price { get; set; }
-        public decimal Discount { get; set; }
-        public decimal Rating { get; set; }
-        public string Description { get; set; }
-        public bool IsFrozen { get; set; }
     
         public virtual Manufacturers Manufacturers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

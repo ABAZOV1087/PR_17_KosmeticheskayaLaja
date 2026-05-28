@@ -15,14 +15,13 @@ namespace PR_17_KosmeticheskayaLaja
     public partial class Appointments
     {
         public int ID_Appointment { get; set; }
-        public int FID_Client { get; set; }
-        public int FID_Master { get; set; }
-        public int FID_ServiceType { get; set; }
         public System.DateTime AppointmentDate { get; set; }
         public System.TimeSpan AppointmentTime { get; set; }
-        public string PaymentMethod { get; set; }
+        public int FID_Master { get; set; }
+        public int FID_Client { get; set; }
+        public int FID_Service { get; set; }
         public string Comment { get; set; }
-        public bool IsCompleted { get; set; }
+        public string PaymentMethod { get; set; }
         public bool IsCanceled { get; set; }
     
         public virtual Users Users { get; set; }

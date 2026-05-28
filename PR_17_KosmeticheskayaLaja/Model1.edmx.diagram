@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fafbb13f58064a85961e6874e45a5870" Name="Diagram1">
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.Appointments" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.Manufacturers" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.MasterServices" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.OrderDetails" Width="1.5" PointX="7.5" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.Orders" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.Products" Width="1.5" PointX="5.25" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.ProductTypes" Width="1.5" PointX="3" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.Roles" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.ServiceTypes" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="KosmeticheskayaLajaModel.Users" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Appointme__FID_C__1BC821DD" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Appointme__FID_M__1AD3FDA4" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Appointme__FID_S__1CBC4616" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Products__FID_Ma__114A936A" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__MasterSer__FID_M__160F4887" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__MasterSer__FID_S__17036CC0" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__OrderDeta__FID_O__25518C17" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__OrderDeta__FID_P__2645B050" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Orders__FID_Clie__2180FB33" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Products__FID_Pr__10566F31" ManuallyRouted="false" />
+        <AssociationConnector Association="KosmeticheskayaLajaModel.FK__Users__FID_Role__06CD04F7" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

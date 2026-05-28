@@ -19,8 +19,8 @@ namespace PR_17_KosmeticheskayaLaja
         {
             this.Appointments = new HashSet<Appointments>();
             this.Appointments1 = new HashSet<Appointments>();
+            this.MasterServices = new HashSet<MasterServices>();
             this.Orders = new HashSet<Orders>();
-            this.ServiceTypes = new HashSet<ServiceTypes>();
         }
     
         public int ID_User { get; set; }
@@ -36,9 +36,9 @@ namespace PR_17_KosmeticheskayaLaja
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Appointments> Appointments1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterServices> MasterServices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
         public virtual Roles Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ServiceTypes> ServiceTypes { get; set; }
     }
 }
